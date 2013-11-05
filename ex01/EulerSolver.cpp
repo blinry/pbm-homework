@@ -7,5 +7,18 @@ void EulerSolver::step(const Time stepsize) {
 	 * particles before you can set the new position and velocity of each particle.
 	 * Do not forget to increment the current time of the system when you are done.
 	 */
+
+	 _system->computeAccelerations();
+
+	 for(unsigned int i = 0; i < _system->particles.size(); ++i)
+	 {
+		 //update velocity
+		 _system->particles[i].velocity += stepsize * _system->particles[i].acceleration;
+
+		 //update position
+		 _system->particles[i].position += stepsize * _system->particles[i].velocity;
+	 }
+
+	 _system->time += stepsize;
 }
 

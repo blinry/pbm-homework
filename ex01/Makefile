@@ -1,6 +1,6 @@
 APP:=ex01
 SHELL:=sh
-CXX:=g++ -Wall -O2
+CXX:=g++ -std=c++0x -Wall -O2
 LD:=g++
 LIBS:=-lGL -lglut
 MAKEDEP:=g++ -M
