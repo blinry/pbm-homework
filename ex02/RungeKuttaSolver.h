@@ -2,6 +2,7 @@
 #define _RUNGE_KUTTA_SOLVER_H
 
 #include "Solver.h"
+using namespace std;
 
 /**
  * Runge-Kutta method for solving the equations of motion of a system.
@@ -17,6 +18,7 @@ class RungeKuttaSolver: public Solver {
 		 * Iterate the system by a fixed timestep.
 		 */
 		void step(const Time stepsize);
+        void compAcc(vector<Length3D> r, vector<Acceleration3D>* a);
 };
 
 #endif
