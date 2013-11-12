@@ -30,5 +30,53 @@ void RungeKuttaSolver::step(const Time stepsize)  {
 	 * When your computation is done, store the new x and v values in the particles.
 	 * Do not forget to increment the current time of the system when you are done.
 	 */
-}
 
+	float factors1[4] = {1.0f/6.0f, 1.0f/3.0f, 1.0f/3.0f, 1.0f/6.0f};
+	float factors2[4] = {1.0f, 1.0f/2.0f, 1.0f/2.0f, 1.0f};
+
+	Time t = _system->time;
+
+	std::vector<Length3D> pos(_system->particles.size());
+	std::vector<Velocity3D> vel(_system->particles.size());
+
+	Length3D current_k_pos;
+	Velocity3D current_k_vel;
+	
+	std::vector<Length3D> k_pos_accum(_system->particles.size());
+	std::vector<Velocity3D> k_vel_accum(_system->particles.size());
+
+	//backup position and velocity
+	for(unsigned int par = 0; par < _system->particles.size(); par++)
+	{
+		k_vel_accum[par] = vel[par] = _system->particles[par].velocity;
+		k_pos_accum[par] = pos[par] = _system->particles[par].position;
+	}
+
+	for(unsigned int midstep = 0; midstep < 4; midstep++)
+	{
+		_system->computeAccelerations();
+		for(unsigned int par = 0; par < _system->particles.size(); par++)
+		{
+			current_k_vel = stepsize * _system->particles[par].acceleration;
+			current_k_pos = stepsize * _system->particles[par].velocity;
+
+			//save accumulated solutions
+			k_vel_accum[par] += factors1[midstep] * current_k_vel;
+			k_pos_accum[par] += factors1[midstep] * current_k_pos;
+
+			if(midstep < 3)
+			{
+				_system->particles[par].velocity = vel[par] + factors2[midstep + 1] * current_k_vel;
+				_system->particles[par].position = pos[par] + factors2[midstep + 1] * current_k_pos;
+				_system->time = t + factors2[midstep + 1] * stepsize;
+			}
+		}
+	}
+
+	for(unsigned int par = 0; par < _system->particles.size(); par++)
+	{
+		_system->particles[par].velocity = k_vel_accum[par];
+		_system->particles[par].position = k_pos_accum[par];
+	}
+	_system->time = t + stepsize;
+}
