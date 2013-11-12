@@ -33,3 +33,5 @@ clean:
 
 -include $(SOURCES:.cpp=.d)
 
+task3: 
+	g++ -std=c++0x task3.cpp AdaptiveEulerSolver.cpp EulerSolver.cpp Particle.cpp GravitationalSystem.cpp RungeKuttaSolver.cpp -o task3

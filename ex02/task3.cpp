@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <ctime>
 
 std::vector<Particle> particles_gt; 
 std::vector<Particle> particles_ee; 
@@ -23,6 +24,10 @@ Solver *solver_rk = NULL;
 
 int main(int argc, char* argv[])
 {
+	clock_t t_ee; //for timing evaluation
+	clock_t t_ae; //for timing evaluation
+	clock_t t_rk; //for timing evaluation
+
 	Time stepsize;
 	float we;
 	if(argc < 2)
@@ -69,10 +74,18 @@ int main(int argc, char* argv[])
 		solver_gt->step(stepsize / (float) groundTruthDivision);
 	}
 
-	//create other solvers' positions
+	//create other solvers' positions and take compution time
+	t_ee = clock();
 	solver_ee->step(stepsize);
+	t_ee = clock() - t_ee;
+
+	t_ae = clock();
 	solver_ae->step(stepsize);
+	t_ae = clock() - t_ae;
+
+	t_rk = clock();
 	solver_rk->step(stepsize);
+	t_rk = clock() - t_rk;
 
 	//cumulate error over all planets:
 	Length e_ee;
@@ -87,9 +100,9 @@ int main(int argc, char* argv[])
 	}
 
 	//print errors and times on std::cout
-	std::cout << "Cumulated Absolute Error of Explicit Euler: " << e_ee << std::endl;
-	std::cout << "Cumulated Absolute Error of Adaptive Euler: " << e_ae << std::endl;
-	std::cout << "Cumulated Absolute Error of Runge Kutta (4th order): " << e_rk << std::endl;
+	std::cout << "Cumulated Absolute Error of Explicit Euler: " << e_ee  << " ;Compution Time: " << ((float)t_ee)/CLOCKS_PER_SEC << std::endl;
+	std::cout << "Cumulated Absolute Error of Adaptive Euler: " << e_ae  << " ;Compution Time: " << ((float)t_ae)/CLOCKS_PER_SEC << std::endl;
+	std::cout << "Cumulated Absolute Error of Runge Kutta (4th order): " << e_rk  << " ;Compution Time: " << ((float)t_rk)/CLOCKS_PER_SEC << std::endl;
 
 
 	delete solver_gt;

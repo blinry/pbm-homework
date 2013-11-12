@@ -154,8 +154,8 @@ int main(int argc, char *argv[]) {
 
 	// Create a particle system and a solver.
 	particle_system = new GravitationalSystem(particles);
-	solver = new EulerSolver(particle_system);
-	//solver = new AdaptiveEulerSolver(particle_system, 1e3 * m);
+	//solver = new EulerSolver(particle_system);
+	solver = new AdaptiveEulerSolver(particle_system, 1e3 * m);
 	//solver = new RungeKuttaSolver(particle_system);
 
 	if (years < 0) { // interactive
