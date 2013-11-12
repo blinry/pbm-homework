@@ -100,9 +100,9 @@ int main(int argc, char* argv[])
 	}
 
 	//print errors and times on std::cout
-	std::cout << "Cumulated Absolute Error of Explicit Euler: " << e_ee  << " ;Compution Time: " << ((float)t_ee)/CLOCKS_PER_SEC << std::endl;
-	std::cout << "Cumulated Absolute Error of Adaptive Euler: " << e_ae  << " ;Compution Time: " << ((float)t_ae)/CLOCKS_PER_SEC << std::endl;
-	std::cout << "Cumulated Absolute Error of Runge Kutta (4th order): " << e_rk  << " ;Compution Time: " << ((float)t_rk)/CLOCKS_PER_SEC << std::endl;
+	std::cout << "Cumulated Absolute Error of Explicit Euler: " << e_ee  << " Compution Time: " << ((float)t_ee)/CLOCKS_PER_SEC << std::endl;
+	std::cout << "Cumulated Absolute Error of Adaptive Euler: " << e_ae  << " Compution Time: " << ((float)t_ae)/CLOCKS_PER_SEC << std::endl;
+	std::cout << "Cumulated Absolute Error of Runge Kutta (4th order): " << e_rk  << " Compution Time: " << ((float)t_rk)/CLOCKS_PER_SEC << std::endl;
 
 
 	delete solver_gt;
