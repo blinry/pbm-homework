@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	else
 	{
 		we = atof(argv[1]);
-		stepsize = we * days; 
+		stepsize = we * 7 * days; 
 	}
 
 	// Read the sun and planets of the solar system from a data file.

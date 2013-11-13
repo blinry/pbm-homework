@@ -1,3 +1,3 @@
-Cumulated Absolute Error of Explicit Euler: 5.5716e+07 m Compution Time: 4.3e-05
-Cumulated Absolute Error of Adaptive Euler: 5.40731e+06 m Compution Time: 0.007251
-Cumulated Absolute Error of Runge Kutta (4th order): 5606.99 m Compution Time: 0.000182
+Cumulated Absolute Error of Explicit Euler: 2.72685e+09 m Compution Time: 4.3e-05
+Cumulated Absolute Error of Adaptive Euler: 3.83629e+07 m Compution Time: 0.050487
+Cumulated Absolute Error of Runge Kutta (4th order): 709252 m Compution Time: 0.000182
