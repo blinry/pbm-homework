@@ -19,6 +19,14 @@ void MassSpringSystem::computeAccelerations() {
     }
 
     for(unsigned int i = 0; i < particles.size(); i++) {
+        // set the accelerations of "fixed" particles to zero
+        if (particles[i].fixed) {
+            particles[i].acceleration[0] = 0*m/(s*s);
+            particles[i].acceleration[1] = 0*m/(s*s);
+            particles[i].acceleration[2] = 0*m/(s*s);
+            continue;
+        }
+
         // damp particle
         particles[i].acceleration -= _damping*particles[i].velocity/particles[i].mass;
 
@@ -29,12 +37,6 @@ void MassSpringSystem::computeAccelerations() {
         particles[i].acceleration[0] += (1.5 + cos(time/_wind_period))*_wind_force/particles[i].mass;
         particles[i].acceleration[2] += sin(time/_wind_period)*_wind_force/particles[i].mass;
 
-        // set the accelerations of "fixed" particles to zero
-        if (particles[i].fixed) {
-            particles[i].acceleration[0] = 0*m/(s*s);
-            particles[i].acceleration[1] = 0*m/(s*s);
-            particles[i].acceleration[2] = 0*m/(s*s);
-        }
     }
 }
 
