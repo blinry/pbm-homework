@@ -19,7 +19,6 @@ void AdaptiveEulerSolver::step(const Time stepsize) {
 	while(passed_time < stepsize)
 	{
 		std::vector<Length3D> r1, r2_2;
-		std::vector<Velocity3D> v2_1;
 		for(unsigned int i = 0; i < _system->particles.size(); i++)
 		{
 			pos[i] = _system->particles[i].position;
