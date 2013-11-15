@@ -23,7 +23,10 @@ void GravitationalSystem::computeAccelerations() {
 	 for(unsigned int i = 0; i < particles.size(); ++i)
 	 {
 		 //The force that affects the Particle;
-		 Force3D f = {0.0 * kg * m /(s*s), 0.0 * kg * m /(s*s), 0.0 * kg * m /(s*s)};
+		 Force3D f;
+		 f[0] = 0.0 * kg * m /(s*s);
+		 f[1] = 0.0 * kg * m /(s*s);
+		 f[2] = 0.0 * kg * m /(s*s);
 
 		 for(unsigned int j = 0; j < particles.size(); ++j)
 		 {
