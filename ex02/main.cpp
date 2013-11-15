@@ -152,6 +152,9 @@ int main(int argc, char *argv[]) {
 		particles.push_back(Particle(mass * kg, position * ex * km, velocity * ey * km / s, name)); // Add a new particle.
 	}
 
+    particles.push_back(Particle(1e30 * kg, (1e9*ey + 1e8*ex) * km, -10 * ey * km / s, "a"));
+    particles.push_back(Particle(1e30 * kg, (-1e9*ey - 1e8*ex) * km, 10 * ey * km / s, "a"));
+
 	// Create a particle system and a solver.
 	particle_system = new GravitationalSystem(particles);
 	//solver = new EulerSolver(particle_system);
@@ -173,7 +176,7 @@ int main(int argc, char *argv[]) {
 		glutMainLoop();
 	} else { // file output
 		// Open a data file for dumping the simulation results.
-		std::ofstream outfile("ex01.dat");
+		std::ofstream outfile("rk2.dat");
 		outfile << 0;
 		for (std::vector<Particle>::const_iterator p = particles.begin(); p != particles.end(); ++p)
 			outfile << ", " << p->position[0].value() << ", " << p->position[1].value();
