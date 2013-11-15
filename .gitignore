@@ -15,6 +15,9 @@
 
 # Binaries
 
+*.ilk
+*.pdb
+*.exe
 ex??/ex??
 bin
 
