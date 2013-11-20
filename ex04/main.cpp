@@ -1,6 +1,7 @@
 #include "MassSpringSystem.h"
 #include "RungeKuttaSolver.h"
 #include "Plane.h"
+#include "Table.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -21,7 +22,7 @@ float modelview_matrix[16] = {1, 0, 0, 0,
 bool running = true;
 
 const Time stepsize = 1e-3 * s; // Simulation time step in simulated time.
-const size_t dimx = 2, dimy = 2, dimz = 2; // Number of particles in the solid body.
+const size_t dimx = 5, dimy = 1, dimz = 5; // Number of particles in the solid body.
 const Stiffness stiffness = 90e4 * g / s / s; // Stiffness of springs in the solid body.
 const SpringDamping springDamping = 90.0 * g / s; // Damping in springs.
 const ParticleDamping particleDamping = 1.0 * g / s; // Damping in particles.
@@ -219,13 +220,21 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Create obstacles.
-	Number3D plane_normal;
+	/*Number3D plane_normal;
 	plane_normal[0] = 0.5; plane_normal[1] = 1.0; plane_normal[2] = 0.0;
 	obstacles.push_back(new Plane(plane_normal / norm(plane_normal), -1.0 * m, bounciness, friction));
 	plane_normal[0] = 0.0; plane_normal[1] = 1.0; plane_normal[2] = 0.0;
 	obstacles.push_back(new Plane(plane_normal / norm(plane_normal), -1.5 * m, bounciness, friction));
 	plane_normal[0] = -1.0; plane_normal[1] = 0.0; plane_normal[2] = 0.0;
 	obstacles.push_back(new Plane(plane_normal / norm(plane_normal), -5.0 * m, bounciness, friction));
+	*/
+
+	Number3D table_normal;
+	table_normal[0] = 0.0; table_normal[1] = 1.0; table_normal[2] = 0.0;
+	Length table_radius = 0.3 * m;
+	Length3D table_origin;
+	table_origin[0] = -6.0 * m; table_origin[1] = 1.0 * m; table_origin[2] = 0.0 * m;
+	obstacles.push_back(new Table(table_origin, table_normal, table_radius, bounciness, friction));
 
 	// Create a particle system.
 	particle_system = new MassSpringSystem(particles, springs, obstacles, particleDamping);

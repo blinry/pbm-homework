@@ -73,7 +73,7 @@ Force3D Plane::computeFrictionForce(const Particle &p) const {
 	Force3D f;
 	if(dot(p.position,_n) < _d)
 	{
-		f  =  dot(p.acceleration * p.mass,_n) * -( p.velocity / norm(p.velocity)) * _f;
+		f  =  dot(p.acceleration * p.mass,_n) * ( p.velocity / norm(p.velocity)) * _f;
 	}
 	return f;
 }
