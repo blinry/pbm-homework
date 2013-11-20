@@ -33,8 +33,8 @@ bool Table::hasCollided(const Length3D& newPos) const
 	return (dot(newPos - _origin, _normal) < Length() && norm((_origin - newPos) - (dot(_origin - newPos, _normal) * _normal)) < _radius);
 }
 
-Force3D Table::computeReflectionForce(const Particle &p) const {
-	
+Force3D Table::computeReflectionForce(const Particle &p) const 
+{	
 	Force3D f;
 	if(this->hasCollided(p.position))
 	{
@@ -45,21 +45,12 @@ Force3D Table::computeReflectionForce(const Particle &p) const {
 	return f;
 }
 
-Force3D Table::computeFrictionForce(const Particle &p) const {
-	/* Please fill in your code for computing the friction force here.
-	 *
-	 * Check if the particle is on the correct side of the plane, i.e., in direction of
-	 * the normal vector "_n". The distance of the plane to the origin is available as
-	 * "_d". If the particle is on the wrong side of the plane, apply the friction force.
-	 * The friction force slows down the particle with respect to the plane. It should be
-	 * proportional to the normal component of the force that is currently acting on the
-	 * particle (the proportionality constant is stored in "_f"), and should act in the
-	 * direction of the velocity of the particle.
-	 */
+Force3D Table::computeFrictionForce(const Particle &p) const 
+{
 	Force3D f;
 	if(hasCollided(p.position))
 	{
-		//f  =  dot(p.acceleration * p.mass,_n) * ( p.velocity / norm(p.velocity)) * _f;
+		f  =  dot(p.acceleration * p.mass,_normal) * ( p.velocity / norm(p.velocity)) * _f;
 	}
 	return f;
 }

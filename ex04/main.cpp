@@ -29,7 +29,7 @@ const ParticleDamping particleDamping = 1.0 * g / s; // Damping in particles.
 const Mass mass = 150.0 * g / (dimx * dimy); // Mass of each particle.
 const Length scale = 2.0 * m; // Length scale for display.
 float shrinkage = 1.0; // Shrinkage of springs with respect to their initial length.
-ReflectionCoefficient bounciness = 3e4 * kg / s / s; // Bounciness of the planes.
+ReflectionCoefficient bounciness = 1e4 * kg / s / s; // Bounciness of the planes.
 Number friction = 0.6; // Friction coefficient of the planes.
 
 std::vector<Particle> particles; // List of particles.
@@ -190,8 +190,8 @@ int main(int argc, char *argv[]) {
 		for (size_t y = 0; y < dimy; ++y) {
 			for (size_t x = 0; x < dimx; ++x) {
 				Length3D p;
-				p[0] = (x / float(dimx > 1 ? dimx - 1 : 1) - 0.5) * m - 6 * m;
-				p[1] = (y / float(dimy > 1 ? dimy - 1 : 1) - 0.5) * m + 5 * m;
+				p[0] = (x / float(dimx > 1 ? dimx - 1 : 1) - 0.5) * m - 1 * m;// - 6 * m;
+				p[1] = (y / float(dimy > 1 ? dimy - 1 : 1) - 0.5) * m - 1 * m;// + 5 * m;
 				p[2] = (z / float(dimz > 1 ? dimz - 1 : 1) - 0.5) * m;
 				particles.push_back(Particle(mass, p, Velocity3D()));
 				// create connections to all existing neighbors
@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
 	table_normal[0] = 0.0; table_normal[1] = 1.0; table_normal[2] = 0.0;
 	Length table_radius = 0.3 * m;
 	Length3D table_origin;
-	table_origin[0] = -6.0 * m; table_origin[1] = 1.0 * m; table_origin[2] = 0.0 * m;
+	table_origin[0] = -1.0 * m; table_origin[1] = -2.0 * m; table_origin[2] = 0.0 * m;
 	obstacles.push_back(new Table(table_origin, table_normal, table_radius, bounciness, friction));
 
 	// Create a particle system.
