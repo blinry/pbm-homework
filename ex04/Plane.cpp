@@ -48,7 +48,15 @@ Force3D Plane::computeReflectionForce(const Particle &p) const {
 	 * plane (the proportionality constant is stored in "_r"), and should act in the
 	 * direction of the normal of the plane.
 	 */
-	return Force3D();
+	
+	Force3D f;
+	if(dot(p.position,_n) < _d)
+	{
+		f = ( _d - dot(p.position,_n)) * _n * _r; 
+	}
+
+	
+	return f;
 }
 
 Force3D Plane::computeFrictionForce(const Particle &p) const {
@@ -62,6 +70,11 @@ Force3D Plane::computeFrictionForce(const Particle &p) const {
 	 * particle (the proportionality constant is stored in "_f"), and should act in the
 	 * direction of the velocity of the particle.
 	 */
-	return Force3D();
+	Force3D f;
+	if(dot(p.position,_n) < _d)
+	{
+		f  =  dot(p.acceleration * p.mass,_n) * -( p.velocity / norm(p.velocity)) * _f;
+	}
+	return f;
 }
 
