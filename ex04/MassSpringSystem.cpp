@@ -30,6 +30,9 @@ void MassSpringSystem::computeAccelerations() {
 	// Keep fixed particles fixed.
 	for (std::vector<Particle>::iterator p = particles.begin(); p != particles.end(); ++p)
 		if (p->fixed)
+		{
 			p->acceleration *= 0.0;
+			p->velocity *= 0.0;
+		}
 }
 

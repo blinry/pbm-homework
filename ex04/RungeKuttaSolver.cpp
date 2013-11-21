@@ -63,6 +63,7 @@ void RungeKuttaSolver::step(const Time stepsize)  {
 		dx4.push_back(_system->particles[i].velocity);
 		dv4.push_back(_system->particles[i].acceleration);
 		// Set  x = x0 + 1/6 h (dx1 + 2 dx2 + 2 dx3 + dx4)  and  v = v0 + 1/6 h (dv1 + 2 dv2 + 2 dv3 + dv4).
+		_system->particles[i].oldpos = x0[i]; //save old position for collision detection
 		_system->particles[i].position = x0[i] + stepsize / 6.0 * (dx1[i] + 2.0 * dx2[i] + 2.0 * dx3[i] + dx4[i]);
 		_system->particles[i].velocity = v0[i] + stepsize / 6.0 * (dv1[i] + 2.0 * dv2[i] + 2.0 * dv3[i] + dv4[i]);
 	}

@@ -37,7 +37,7 @@ void Plane::draw(const Length &scale) const {
 	glEnd();
 }
 
-Force3D Plane::computeReflectionForce(const Particle &p) const {
+Force3D Plane::computeReflectionForce(Particle &p) const {
 	/* Please fill in your code for computing the reflection force here.
 	 *
 	 * Check if the particle is on the correct side of the plane, i.e., in direction of
@@ -59,7 +59,7 @@ Force3D Plane::computeReflectionForce(const Particle &p) const {
 	return f;
 }
 
-Force3D Plane::computeFrictionForce(const Particle &p) const {
+Force3D Plane::computeFrictionForce(Particle &p) const {
 	/* Please fill in your code for computing the friction force here.
 	 *
 	 * Check if the particle is on the correct side of the plane, i.e., in direction of

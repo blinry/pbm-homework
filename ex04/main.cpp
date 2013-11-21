@@ -13,24 +13,24 @@
 #include <GL/glut.h>
 #endif
 
-GLint windowWidth = 800, windowHeight = 600;
+GLint windowWidth = 1024, windowHeight = 768;
 int old_button = -1, old_state = -1, old_x = -1, old_y = -1;
 float modelview_matrix[16] = {1, 0, 0, 0,
                               0, 1, 0, 0,
                               0, 0, 1, 0,
-                              0, 0, -6, 1};
+                              0, 0, -2, 1};
 bool running = true;
 
 const Time stepsize = 1e-3 * s; // Simulation time step in simulated time.
-const size_t dimx = 5, dimy = 1, dimz = 5; // Number of particles in the solid body.
-const Stiffness stiffness = 90e4 * g / s / s; // Stiffness of springs in the solid body.
-const SpringDamping springDamping = 90.0 * g / s; // Damping in springs.
-const ParticleDamping particleDamping = 1.0 * g / s; // Damping in particles.
-const Mass mass = 150.0 * g / (dimx * dimy); // Mass of each particle.
+const size_t dimx = 30, dimy = 2, dimz = 30; // Number of particles in the solid body.
+const Stiffness stiffness = 50e4 * g / s / s; // Stiffness of springs in the solid body.
+const SpringDamping springDamping = 180.0 * g / s; // Damping in springs.
+const ParticleDamping particleDamping = 2.0 * g / s; // Damping in particles.
+const Mass mass = 70.0 * g / (dimx * dimy); // Mass of each particle.
 const Length scale = 2.0 * m; // Length scale for display.
 float shrinkage = 1.0; // Shrinkage of springs with respect to their initial length.
-ReflectionCoefficient bounciness = 1e4 * kg / s / s; // Bounciness of the planes.
-Number friction = 0.6; // Friction coefficient of the planes.
+ReflectionCoefficient bounciness = 3e3 * kg / s / s; // Bounciness of the planes.
+Number friction = 0.8; // Friction coefficient of the planes.
 
 std::vector<Particle> particles; // List of particles.
 std::vector<Spring> springs; // List of springs.
@@ -110,6 +110,27 @@ void display() {
 		}
 	}
 	glEnd();
+	/*
+	// Draw the springs. Colors indicate stress.
+	glBegin(GL_LINES);
+	for (std::vector<Spring>::const_iterator s = springs.begin(); s != springs.end(); ++s) {
+		float c = fabs(norm(s->p1->position - s->p2->position) / s->length - 1.0);
+		glColor3f(c, 1.0 - c, 0.0);
+		glVertex3d(s->p1->position[0] / scale, s->p1->position[1] / scale, s->p1->position[2] / scale);
+		glVertex3d(s->p2->position[0] / scale, s->p2->position[1] / scale, s->p2->position[2] / scale);
+	}
+	glEnd();
+
+	// Draw the particles.
+	glColor3f(0.0, 0.0, 1.0);
+	for (std::vector<Particle>::const_iterator p = particles.begin(); p != particles.end(); ++p) {
+		glPushMatrix();
+		glTranslatef(p->position[0] / scale, p->position[1] / scale, p->position[2] / scale);
+		glutSolidSphere(0.002 * m / scale, 90, 45);
+		glPopMatrix();
+	}
+	glEnd();
+	*/
 	
 	glutSwapBuffers();
 }
@@ -191,7 +212,7 @@ int main(int argc, char *argv[]) {
 			for (size_t x = 0; x < dimx; ++x) {
 				Length3D p;
 				p[0] = (x / float(dimx > 1 ? dimx - 1 : 1) - 0.5) * m - 1 * m;// - 6 * m;
-				p[1] = (y / float(dimy > 1 ? dimy - 1 : 1) - 0.5) * m - 1 * m;// + 5 * m;
+				p[1] = (y / float(dimy > 1 ? dimy - 1 : 1) - 0.5) * 0.005 * m - 1.7 * m;// + 5 * m;
 				p[2] = (z / float(dimz > 1 ? dimz - 1 : 1) - 0.5) * m;
 				particles.push_back(Particle(mass, p, Velocity3D()));
 				// create connections to all existing neighbors
@@ -231,9 +252,13 @@ int main(int argc, char *argv[]) {
 
 	Number3D table_normal;
 	table_normal[0] = 0.0; table_normal[1] = 1.0; table_normal[2] = 0.0;
-	Length table_radius = 0.3 * m;
+	Length table_radius = 0.35 * m;
 	Length3D table_origin;
 	table_origin[0] = -1.0 * m; table_origin[1] = -2.0 * m; table_origin[2] = 0.0 * m;
+	obstacles.push_back(new Table(table_origin, table_normal, table_radius, bounciness, friction));
+	table_origin[0] =  -1.15 * m; table_origin[1] =  -1.9 * m;
+	obstacles.push_back(new Table(table_origin, table_normal, table_radius, bounciness, friction));
+	table_origin[0] =  -0.85 * m; table_origin[1] =  -2.1 * m;
 	obstacles.push_back(new Table(table_origin, table_normal, table_radius, bounciness, friction));
 
 	// Create a particle system.

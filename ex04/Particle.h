@@ -20,6 +20,7 @@ class Particle {
 
 		Mass mass; //< Mass of the particle.
 		Length3D position; //< Position of the particle.
+		Length3D oldpos; // < Old position; better collision detection
 		Velocity3D velocity; //< Velocity of the particle.
 		Acceleration3D acceleration; //< Acceleration of the particle, as computed by a system.
 		bool fixed; //< Flag is true if the particle cannot move.

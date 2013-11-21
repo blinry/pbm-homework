@@ -21,12 +21,12 @@ class Obstacle {
 		/**
 		 * Compute the reflection force on a particle.
 		 */
-		virtual Force3D computeReflectionForce(const Particle &p) const = 0;
+		virtual Force3D computeReflectionForce(Particle &p) const = 0;
 
 		/**
 		 * Compute the friction force on a particle.
 		 */
-		virtual Force3D computeFrictionForce(const Particle &p) const = 0;
+		virtual Force3D computeFrictionForce(Particle &p) const = 0;
 
 		/**
 		 * Draw the obstacle on the screen.

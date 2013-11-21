@@ -14,7 +14,7 @@ private:
 	* collision check for
 	* Position newPos
 	*/
-	bool hasCollided(const Length3D& newPos) const;
+	int hasCollided(Particle& p) const;
 public:
 	/*
 	 * create a circular table from
@@ -34,12 +34,12 @@ public:
 	/**
 	* Compute the reflection force on a particle.
 	*/
-	Force3D computeReflectionForce(const Particle &p) const;
+	Force3D computeReflectionForce(Particle &p) const;
 
 	/**
 	* Compute the friction force on a particle.
 	*/
-	Force3D computeFrictionForce(const Particle &p) const;
+	Force3D computeFrictionForce(Particle &p) const;
 
 	/**
 	* Draw the obstacle on the screen.

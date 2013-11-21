@@ -28,27 +28,46 @@ void Table::draw(const Length &scale) const
 	glEnd();
 }
 
-bool Table::hasCollided(const Length3D& newPos) const
+int Table::hasCollided(Particle& p) const
 {
-	return (dot(newPos - _origin, _normal) < Length() && norm((_origin - newPos) - (dot(_origin - newPos, _normal) * _normal)) < _radius);
+	static Length epsilon = 0.01 * m;
+	if(dot(p.position - p.oldpos, _normal) * dot(p.position - p.oldpos, _normal) > 0 * m * m)
+	{
+		Number s = (dot(_origin, _normal) - dot(p.oldpos, _normal))/(dot(p.position - p.oldpos, _normal));
+		if(Number(-1) <= s && s <= Number(1))
+		{
+			Length3D hit = p.oldpos + s * (p.position - p.oldpos);
+			
+			if(norm(hit - _origin) <= _radius)
+			{
+				p.oldpos = p.position;
+				p.position = hit + (s >= Number(0) ? 1:-1) * epsilon * _normal;
+
+				return s >= Number(0) ? 1:-1;
+			}
+		}
+	}
+	return false;
 }
 
-Force3D Table::computeReflectionForce(const Particle &p) const 
+Force3D Table::computeReflectionForce(Particle &p) const 
 {	
 	Force3D f;
-	if(this->hasCollided(p.position))
+	int side;
+	if((side = this->hasCollided(p)) != 0)
 	{
-		f = (abs(dot(p.position - _origin, _normal))) * _normal * _r; 
+		f = (abs(dot(p.oldpos - _origin, _normal))) * side * _normal * _r; 
+		p.fixed = true;
 	}
 
 	
 	return f;
 }
 
-Force3D Table::computeFrictionForce(const Particle &p) const 
+Force3D Table::computeFrictionForce(Particle &p) const 
 {
 	Force3D f;
-	if(hasCollided(p.position))
+	if(hasCollided(p) != 0)
 	{
 		f  =  dot(p.acceleration * p.mass,_normal) * ( p.velocity / norm(p.velocity)) * _f;
 	}

@@ -33,12 +33,12 @@ class Plane: public Obstacle {
 		/**
 		 * Compute the reflection force on a particle.
 		 */
-		Force3D computeReflectionForce(const Particle &p) const;
+		Force3D computeReflectionForce(Particle &p) const;
 
 		/**
 		 * Compute the friction force on a particle.
 		 */
-		Force3D computeFrictionForce(const Particle &p) const;
+		Force3D computeFrictionForce(Particle &p) const;
 
 		/**
 		 * Draw the obstacle on the screen.
