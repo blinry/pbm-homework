@@ -47,7 +47,7 @@ int Table::hasCollided(Particle& p) const
 			}
 		}
 	}
-	return false;
+	return 0;
 }
 
 Force3D Table::computeReflectionForce(Particle &p) const 
