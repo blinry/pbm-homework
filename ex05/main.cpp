@@ -199,6 +199,25 @@ int main(int argc, char *argv[]) {
 	 * Then create a solver "ms_solver" for particles of that type.
 	 */
 
+    Length3D null_length;
+    Length3D l;
+
+    particles.push_back(Particle<Length3D>(1.0 * kg, l, null_length/s, true));
+
+    l[0] = sin(120*M_PI/180)*m;
+    l[1] = -cos(120*M_PI/180)*m;
+    particles.push_back(Particle<Length3D>(1.0 * kg, l, null_length/s));
+
+    l[0] += sin(60*M_PI/180)*m;
+    l[1] += -cos(60*M_PI/180)*m;
+    particles.push_back(Particle<Length3D>(1.0 * kg, l, null_length/s));
+
+    springs.push_back(Spring(particles[0], particles[1], stiffness, 1.0*kg/s));
+    springs.push_back(Spring(particles[1], particles[2], stiffness, 1.0*kg/s));
+
+    ms_system = new MassSpringSystem(particles, springs);
+    ms_solver = new RungeKuttaSolver<Particle<Length3D> >(ms_system);
+
 	for (size_t i = 0; i < num_el_systems; ++i) {
 		std::vector<Particle<Angle> > *particles = new std::vector<Particle<Angle> >;
 		particles->push_back(Particle<Angle>(1.0 * kg, (i == 0 ? 120 : (120 + rand() / double(RAND_MAX))) * M_PI / 180, 0 / s));
