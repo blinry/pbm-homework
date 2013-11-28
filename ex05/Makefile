@@ -1,4 +1,4 @@
-APP:=ex03
+APP:=ex05
 SHELL:=sh
 CXX:=g++ -Wall -O2 -fno-strict-aliasing
 LD:=g++
