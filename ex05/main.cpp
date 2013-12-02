@@ -24,6 +24,7 @@ float modelview_matrix[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 
 const Time stepsize = 1e-2 * s; // Simulation time step in simulated time.
 const Stiffness stiffness = 3e7 * g / s / s; // Stiffness of springs in the cloth.
+const SpringDamping damping = 0 * g / s; // Damping in Springs
 const Length scale = 2.0 * m; // Length scale for display.
 
 std::vector<Particle<Length3D> > particles; // List of particles.
@@ -198,8 +199,30 @@ int main(int argc, char *argv[]) {
 	/* Create a mass-spring double pendulum "ms_system" with three particles of type Particle<Length3D>.
 	 * Then create a solver "ms_solver" for particles of that type.
 	 */
+	
+	Length3D p;
 
-	for (size_t i = 0; i < num_el_systems; ++i) {
+	ms_positions.push_back(p);
+	particles.push_back(Particle<Length3D>(1 * kg, ms_positions[0], Velocity3D(), true));
+
+	p[0] = sin(120.0 * M_PI / 180.0) * m;
+	p[1] = -cos(120.0 * M_PI / 180.0) * m;
+	p[2] = 0 * m;
+	ms_positions.push_back(p);
+	particles.push_back(Particle<Length3D>(1 * kg, ms_positions[1], Velocity3D()));
+
+	p[0] += sin(60.0 * M_PI / 180.0) * m;
+	p[1] += -cos(60.0 * M_PI / 180.0) * m;
+	ms_positions.push_back(p);
+	particles.push_back(Particle<Length3D>(1 * kg, ms_positions[2], Velocity3D()));
+
+	springs.push_back(Spring(particles[0], particles[1], stiffness, damping));
+	springs.push_back(Spring(particles[1], particles[2], stiffness, damping));
+
+	ms_system = new MassSpringSystem(particles, springs, damping); //no particle damping
+	ms_solver = new RungeKuttaSolver<Particle<Length3D> >(ms_system);
+
+	for(size_t i = 0; i < num_el_systems; ++i) {
 		std::vector<Particle<Angle> > *particles = new std::vector<Particle<Angle> >;
 		particles->push_back(Particle<Angle>(1.0 * kg, (i == 0 ? 120 : (120 + rand() / double(RAND_MAX))) * M_PI / 180, 0 / s));
 		particles->push_back(Particle<Angle>(1.0 * kg, (i == 0 ?  60 : ( 60 + rand() / double(RAND_MAX))) * M_PI / 180, 0 / s));
@@ -237,6 +260,8 @@ int main(int argc, char *argv[]) {
 
 	glutMainLoop();
 
+	delete ms_system;
+	delete ms_solver;
 	return 0;
 }
 
