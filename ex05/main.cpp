@@ -23,8 +23,17 @@ int old_button = -1, old_state = -1, old_x = -1, old_y = -1;
 float modelview_matrix[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 
 const Time stepsize = 1e-2 * s; // Simulation time step in simulated time.
+//const Time stepsize = 1.1e-2 * s; //For task 3
+//const Time stepsize = 1e-3 * s; //For task 3
+
 const Stiffness stiffness = 3e7 * g / s / s; // Stiffness of springs in the cloth.
-const SpringDamping damping = 0 * g / s; // Damping in Springs
+//const Stiffness stiffness = 3.4e7 * g / s / s; //For task 3
+//const Stiffness stiffness = 3e6 * g / s / s; //For task 3
+
+//const SpringDamping damping = 0 * g / s; // Damping in Springs
+//const SpringDamping damping = 1e2 * g / s; //For task 3
+const SpringDamping damping = 1e5 * g / s; //For task 3
+
 const Length scale = 2.0 * m; // Length scale for display.
 
 std::vector<Particle<Length3D> > particles; // List of particles.
@@ -34,6 +43,8 @@ Solver<Particle<Length3D> > *ms_solver = NULL; // The solver.
 std::vector<Length3D> ms_positions;
 
 const size_t num_el_systems = 1;
+//const size_t num_el_systems = 50; // For task 3
+
 std::vector<DoublePendulum *> el_systems;
 std::vector<Solver<Particle<Angle> >*> el_solvers;
 std::vector<Number3D> el_colors;

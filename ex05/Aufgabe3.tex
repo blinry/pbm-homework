@@ -1,0 +1,31 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\title{Physikbasierte Modellierung und Simulation Aufgabe 5.3}
+\begin{document}
+\section{Lösungen zu Aufgabe 5.3}
+
+\subsection{Vergleich beider Lösungen}
+Anfangs verhalten sich noch beide Lösungen visuell identisch. Nach einigen Sekunden in der Simulation divergieren die Lösungen beider Systeme stark und verhalten sich dann nicht mehr so, als wären beide Systeme mit den selben Startwerten initialisiert worden.
+
+\subsection{Änderung der Schrittweite}
+Bereits für eine geringfügige Erhöhung der stepsize wird die Lösung mit dem MassSpringSystem instabil und liefert kein glaubwürdiges Doppelpendel mehr.
+
+Eine (auch sehr starke) Erniedrigung der stepsize hingegen liefert kein sichtbar anderes Ergebnis im Vergleich zur voreingestellten stepsize. Auch dort divergieren beide Simulationen am selben Zeitpunkt.
+
+\subsection{Änderung der Stiffness}
+Recht kleine Änderungen der stiffness bringen keinen visuellen Unterschied. Ab einer Erhöhung um ca. $4 \cdot 10^{6} \frac{g}{s^2}$ wird die Simulation des MassSpringSystems instabil.
+
+Bei Erniedrigung der stiffness lässt man zu, dass sich die Feder merklich dehnt. Das führt dazu, dass die Verbindungsfedern im MassSpringSystem auf Grund ihrer Auslenkung zu schwingen beginnen, was keiner Simulation im Sinne eines Doppelpendels mit starren Verbindungsstücken entspricht.
+
+\subsection{Einführung eines Dampings}
+Die Einführung einer kleinen Dämpfung von ca. $100 \frac{g}{s}$ führt zu einer Verlangsamung des Pendels bis zu dem Punkt, bis das Pendel nur noch herunterhängt.
+
+Eine sehr große Dämpfung im Bereich $10^5 \frac{g}{s}$ führt dann zu instabilem Verhalten, in der sich der äußerste Massepunkt periodisch sprunghaft bewegt.
+
+\subsection{Mehrere DoublePendulums}
+Erzeugt man mehrere DoublePendulums mit ähnlichen Startwerten, verhalten sich diese anfangs noch sehr ähnlich (sie beschreiben fast dieselben Bahnen). Nach einigen hundert Iterationen jedoch divergieren auch diese Simulationen auf Grund der Startwerte und die Simulation zeigt ein chaotisches Bewegungsmuster, in der die einzelnen Pendel voneinander völlig unabhängige Bahnen verfolgen.
+\end{document}
