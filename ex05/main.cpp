@@ -30,9 +30,9 @@ const Stiffness stiffness = 3e7 * g / s / s; // Stiffness of springs in the clot
 //const Stiffness stiffness = 3.4e7 * g / s / s; //For task 3
 //const Stiffness stiffness = 3e6 * g / s / s; //For task 3
 
-//const SpringDamping damping = 0 * g / s; // Damping in Springs
+const SpringDamping damping = 0 * g / s; // Damping in Springs
 //const SpringDamping damping = 1e2 * g / s; //For task 3
-const SpringDamping damping = 1e5 * g / s; //For task 3
+//const SpringDamping damping = 1e5 * g / s; //For task 3
 
 const Length scale = 2.0 * m; // Length scale for display.
 
