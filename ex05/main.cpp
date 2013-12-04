@@ -207,26 +207,23 @@ void keyboard(unsigned char key, int x, int y) {
  * Create or load a particle system and simulate a number of time steps.
  */
 int main(int argc, char *argv[]) {
-	/* Create a mass-spring double pendulum "ms_system" with three particles of type Particle<Length3D>.
-	 * Then create a solver "ms_solver" for particles of that type.
-	 */
-	
 	Length3D p;
 
-	ms_positions.push_back(p);
-	particles.push_back(Particle<Length3D>(1 * kg, ms_positions[0], Velocity3D(), true));
+    // first particle
+	particles.push_back(Particle<Length3D>(1 * kg, p, Velocity3D(), true));
 
+    // second particle
 	p[0] = sin(120.0 * M_PI / 180.0) * m;
 	p[1] = -cos(120.0 * M_PI / 180.0) * m;
 	p[2] = 0 * m;
-	ms_positions.push_back(p);
-	particles.push_back(Particle<Length3D>(1 * kg, ms_positions[1], Velocity3D()));
+	particles.push_back(Particle<Length3D>(1 * kg, p, Velocity3D()));
 
+    // third particle
 	p[0] += sin(60.0 * M_PI / 180.0) * m;
 	p[1] += -cos(60.0 * M_PI / 180.0) * m;
-	ms_positions.push_back(p);
-	particles.push_back(Particle<Length3D>(1 * kg, ms_positions[2], Velocity3D()));
+	particles.push_back(Particle<Length3D>(1 * kg, p, Velocity3D()));
 
+    // springs
 	springs.push_back(Spring(particles[0], particles[1], stiffness, damping));
 	springs.push_back(Spring(particles[1], particles[2], stiffness, damping));
 

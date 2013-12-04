@@ -4,10 +4,6 @@ DoublePendulum::DoublePendulum(std::vector<particle_type> &particles, const Leng
 	System(particles), l1(l1), l2(l2) {}
 
 void DoublePendulum::computeAccelerations() {
-	/* Read the angle ("position") and angular velocity ("velocity") of both particles from the "particles" vector.
-	 * Then compute the angular accelerations and store them in the particles' "acceleration" variable.
-	 */
-
 	Particle<Angle>::length_type theta1 = particles[0].position;
 	Particle<Angle>::length_type theta2 = particles[1].position;
 	Particle<Angle>::length_type delta = theta2 - theta1;
@@ -19,6 +15,7 @@ void DoublePendulum::computeAccelerations() {
 	Mass m2 = particles[1].mass;
 	Acceleration g = 9.81 * m / s / s;
 
+    // computation according to exercise sheet:
 	particles[0].acceleration = (m2 * l1 * omega1 * omega1 * sin(delta) * cos(delta) + m2 * g * sin(theta2) * cos(delta) + m2 * l2 * omega2 * omega2 * sin(delta) - (m1 + m2) * g * sin(theta1)) /
 		((m1 + m2) * l1 - m2 * l1 * cos(delta) * cos(delta)); //d omega1 / dt
 
