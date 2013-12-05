@@ -7,11 +7,15 @@
 #include <GL/glut.h>
 #endif
 
-#include <Box2D.h>
+#define M_PI 3.141592
+
+#include <btBulletDynamicsCommon.h>
 
 GLint windowWidth = 800, windowHeight = 600; // window dimensions
-b2World world(b2Vec2(0.0, -9.81), true); // Box2D world with given gravity
-std::vector<b2Body*> bodies; // list of all bodies in the world
+btCollisionShape* groundShape;
+btDiscreteDynamicsWorld* dynamicsWorld;
+std::vector<btRigidBody*> objects;
+
 
 // display callback: renders the scene
 void display() {
@@ -23,30 +27,34 @@ void display() {
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	btTransform trans;
 	// render bodies
-	for (std::vector<b2Body*>::const_iterator body = bodies.begin(); body != bodies.end(); ++body) {
+	for (std::vector<btRigidBody*>::const_iterator body = objects.begin(); body != objects.end(); ++body) {
 		// color
-		glColor3f((*body)->IsAwake(), 1.0 - (*body)->IsActive(), 1.0 - (*body)->IsAwake());
+		glColor3f(1.0f, 0.5f, 0.0f);
+
+		(*body)->getMotionState()->getWorldTransform(trans);
 
 		// position and orientation
-		b2Vec2 position = (*body)->GetPosition();
-		float32 angle = (*body)->GetAngle();
+		float angle = trans.getRotation().getAngle();
 		glPushMatrix();
-		glTranslated(position.x, position.y, 0.0);
-		glRotated(180.0 * angle / M_PI, 0.0, 0.0, 1.0);
+		glTranslated(trans.getOrigin().getX(), trans.getOrigin().getY(), 0.0);
+		//glRotated(180.0 * angle / M_PI, 0.0, 0.0, 1.0);
 
 		// vertices
-		for (b2Fixture *fixture = (*body)->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
-			if (fixture->GetShape()->GetType() == b2Shape::e_polygon) {
-				glBegin(GL_POLYGON);
-				b2PolygonShape *shape = dynamic_cast<b2PolygonShape*>(fixture->GetShape());
-				for (int32 i = 0; i < shape->GetVertexCount(); ++i) {
-					b2Vec2 v = shape->GetVertex(i);
-					glVertex2d(v.x, v.y);
-				}
-				glEnd();
-			}
+		glBegin(GL_POLYGON);
+		for (int i= 0; i<3; i++) 
+		{
+			//glVertex2d(trans.getOrigin().getX() + xadd[(i)%4], trans.getOrigin().getY() + yadd[(i)%4]);	
+			trans.getOrigin().getX()
 		}
+		glEnd();
+		glBegin(GL_POLYGON);
+		for (int i= 0; i<3; i++) 
+		{
+			//glVertex2d(trans.getOrigin().getX() + xadd[(i+1)%4], trans.getOrigin().getY() + yadd[(i+1)%4]);	
+		}
+		glEnd();
 		glPopMatrix();
 	}
 
@@ -62,57 +70,84 @@ void reshape(int width, int height) {
 
 // perform time step
 void idle() {
-	world.Step(1.0 / 60.0, 6, 2);
-	world.ClearForces();
+	//world.Step(1.0 / 60.0, 6, 2);
+	dynamicsWorld->stepSimulation(1/60.f,10);
+	//world->ClearForces();
 
 	glutPostRedisplay();
 }
 
-void make_body(double x0, double x1, double y0, double y1, bool fixed=false) {
-	/* Please insert your code for creating a body here. The body should be
-	 * a box with corners at (x0, y0), (x0, y1), (x1, y1), and (x1, y0),
-	 * respectively. Note that Box2D uses the center, half width and half
-	 * height to specify boxes.
-	 *
-	 * You can store the properties of the body in a b2BodyDef object. Then
-	 * you can use the CreateBody factory method of the Box2D world to
-	 * create the body. Remember to set the body type to "dynamic" if it is
-	 * not "fixed".
-	 *
-	 * Then, you should create a shape and a fixture that are necessary for
-	 * collisions. The shape stores the dimensions of the box. For a "fixed"
-	 * body you can directly create a fixture by passing the shape to the
-	 * CreateFixture member function of your body. For a dynamic body, you
-	 * will need to create a b2FixtureDef object that also defines the
-	 * density, friction and restitution of the body.
-	 *
-	 * Finally, append the body to the "bodies" list so it will be painted
-	 * in the "display" method.
-	 */
+void make_body(double x0, double x1, double y0, double y1, const bool fixed = false) 
+{
+	btCollisionShape* domino;
+	domino = new btBoxShape(btVector3(btScalar(abs(x1-x0)/2.0),btScalar(abs(y1-y0)/2.0),btScalar(0.1)));
+
+	btDefaultMotionState* dominoMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3((x0+x1)/2.0,(y1+y0)/2.0,0)));
+	btScalar mass = 0.1;
+	if(fixed)
+		mass = 0.0;
+
+	btVector3 fallInertia(0,0,0);
+	domino->calculateLocalInertia(mass,fallInertia);
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,dominoMotionState,domino,fallInertia);
+	btRigidBody* dominoRigidBody = new btRigidBody(fallRigidBodyCI);
+	objects.push_back(dominoRigidBody);
+	dynamicsWorld->addRigidBody(dominoRigidBody);
+}
+
+void keyboard(unsigned char key, int x, int y) {
+	switch (key) {
+		case 27:
+			exit(0);
+			break;
+	}
 }
 
 int main(int argc, char **argv) {
-	// create bodies
-	for (int y = 0; y < 6; ++y) {
-		for (int x = -29 - 2 * y; x <= 29 + 2 * y; x += 2)
-			make_body(x - 0.25, x + 0.25, 50 - 10 * y, 50 - 10 * y + 4);
-		make_body(-30 - 2 * y, 30 + 2 * y, 49 - 10 * y, 50 - 10 * y, true);
+
+    // Build the broadphase
+    btBroadphaseInterface* broadphase = new btDbvtBroadphase();
+
+    // Set up the collision configuration and dispatcher
+    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+    // The actual physics solver
+    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+    // The world.
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0,-10,0));
+
+	//// create bodies
+	//for (int y = 0; y < 6; ++y) {
+	//	for (int x = -29 - 2 * y; x <= 29 + 2 * y; x += 2)
+	//		make_body(x - 0.25, x + 0.25, 50 - 10 * y, 50 - 10 * y + 4);
+	//	make_body(-30 - 2 * y, 30 + 2 * y, 49 - 10 * y, 50 - 10 * y, true);
+	//}
+
+	//for (int y = 0; y < 11; ++y) {
+	//	for (int x = -58 + 2 * y; x <= 58 - 2 * y; x += 4)
+	//		make_body(x - 0.25, x + 0.25, -59 + 4.5 * y, -59 + 4.5 * y + 4);
+	//	for (int x = -56 + 2 * y; x <= 56 - 2 * y; x += 4)
+	//		make_body(x - 2, x + 2, -55 + 4.5 * y, -54.5 + 4.5 * y);
+	//}
+
+	///* To start your domino chain, rotate the first body by a few degrees. */
+
+	//// create surrounding box
+	//make_body(-80.0, 80.0, -60.0, -59.0, true);
+	//make_body(-80.0, 80.0, 59.0, 60.0, true);
+	//make_body(-80.0, -79.0, -60.0, 60.0, true);
+	//make_body(79.0, 80.0, -60.0, 60.0, true);
+
+	//ground plane
+	make_body(-30, 30, -2, -2.1, true);
+
+	for (int x = -29; x <= 29; x += 2)
+	{
+		make_body(x - 0.25, x + 0.25, 1, 5);
 	}
-
-	for (int y = 0; y < 11; ++y) {
-		for (int x = -58 + 2 * y; x <= 58 - 2 * y; x += 4)
-			make_body(x - 0.25, x + 0.25, -59 + 4.5 * y, -59 + 4.5 * y + 4);
-		for (int x = -56 + 2 * y; x <= 56 - 2 * y; x += 4)
-			make_body(x - 2, x + 2, -55 + 4.5 * y, -54.5 + 4.5 * y);
-	}
-
-	/* To start your domino chain, rotate the first body by a few degrees. */
-
-	// create surrounding box
-	make_body(-80.0, 80.0, -60.0, -59.0, true);
-	make_body(-80.0, 80.0, 59.0, 60.0, true);
-	make_body(-80.0, -79.0, -60.0, 60.0, true);
-	make_body(79.0, 80.0, -60.0, 60.0, true);
 
 	// enable smoothing
 	glEnable(GL_BLEND);
@@ -133,7 +168,15 @@ int main(int argc, char **argv) {
 	glutIdleFunc(idle);
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
+	glutKeyboardFunc(keyboard);
 	glutMainLoop();
+
+	// Clean up behind ourselves like good little programmers
+    delete dynamicsWorld;
+    delete solver;
+    delete dispatcher;
+    delete collisionConfiguration;
+    delete broadphase;
 
 	return 0;
 }
