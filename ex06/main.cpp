@@ -96,22 +96,21 @@ void idle() {
 	glutPostRedisplay();
 }
 
-void make_body(double x0, double x1, double y0, double y1, const bool fixed = false) 
-{
-	btCollisionShape* domino;
-	domino = new btBoxShape(btVector3(btScalar(abs(x1-x0)/2.0),btScalar(abs(y1-y0)/2.0),btScalar(1)));
+void make_body(float x, float y, float z, float a, float b, float c, float yaw, float pitch, float roll, const bool fixed = false) {
+	btCollisionShape* box;
+	box = new btBoxShape(btVector3(a/2, b/2, c/2));
 
-	btDefaultMotionState* dominoMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3((x0+x1)/2.0,(y1+y0)/2.0,0)));
+	btDefaultMotionState* boxMotionState = new btDefaultMotionState(btTransform(btQuaternion(yaw, pitch, roll),btVector3(x, y, z)));
 	btScalar mass = 0.1;
 	if(fixed)
 		mass = 0.0;
 
 	btVector3 fallInertia(0,0,0);
-	domino->calculateLocalInertia(mass,fallInertia);
-	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,dominoMotionState,domino,fallInertia);
-	btRigidBody* dominoRigidBody = new btRigidBody(fallRigidBodyCI);
-	objects.push_back(dominoRigidBody);
-	dynamicsWorld->addRigidBody(dominoRigidBody);
+	box->calculateLocalInertia(mass,fallInertia);
+	btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,boxMotionState,box,fallInertia);
+	btRigidBody* boxRigidBody = new btRigidBody(fallRigidBodyCI);
+	objects.push_back(boxRigidBody);
+	dynamicsWorld->addRigidBody(boxRigidBody);
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -166,11 +165,12 @@ int main(int argc, char **argv) {
 	//make_body(79.0, 80.0, -60.0, 60.0, true);
 
 	//ground plane
-	make_body(-30, 30, -2, -2.1, true);
+	//make_body(-30, 30, -2, -2.1, true);
+    make_body(0, -1, 0, 60, 1, 60, 0, 0, 0, true);
 
 	for (int x = -29; x <= 29; x += 2)
 	{
-		make_body(x - 0.5, x + 0.5, 1, 5);
+        make_body(x, 3, 0, 0.5, 4, 1.5, 0, 0, 0);
 	}
     objects[1]->applyForce(btVector3(0,-20,0),btVector3(3,0,0));
 
