@@ -20,8 +20,6 @@ std::vector<btRigidBody*> objects;
 
 // display callback: renders the scene
 void display() {
-    dynamicsWorld->debugDrawWorld();
-    /*
 	glViewport(0, 0, windowWidth, windowHeight);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -30,39 +28,10 @@ void display() {
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	btTransform trans;
-	// render bodies
-	for (std::vector<btRigidBody*>::const_iterator body = objects.begin(); body != objects.end(); ++body) {
-		// color
-		glColor3f(1.0f, 0.5f, 0.0f);
+    dynamicsWorld->debugDrawWorld();
 
-		(*body)->getMotionState()->getWorldTransform(trans);
-
-		// position and orientation
-		float angle = trans.getRotation().getAngle();
-		glPushMatrix();
-		glTranslated(trans.getOrigin().getX(), trans.getOrigin().getY(), 0.0);
-		//glRotated(180.0 * angle / M_PI, 0.0, 0.0, 1.0);
-
-		// vertices
-		glBegin(GL_POLYGON);
-		for (int i= 0; i<3; i++) 
-		{
-			glVertex2d(trans.getOrigin().getX(), trans.getOrigin().getY());	
-			//trans.getOrigin().getX();
-		}
-		glEnd();
-		glBegin(GL_POLYGON);
-		for (int i= 0; i<3; i++) 
-		{
-			glVertex2d(trans.getOrigin().getX(), trans.getOrigin().getY());	
-		}
-		glEnd();
-		glPopMatrix();
-	}
-
+    glFlush();
 	glutSwapBuffers();
-    */
 }
 
 // reshape callback: sets window width and height
@@ -126,6 +95,7 @@ int main(int argc, char **argv) {
     GLDebugDrawer dd;
 
     dynamicsWorld->setDebugDrawer(&dd);
+    dynamicsWorld->getDebugDrawer()->setDebugMode(true);
 
 	//// create bodies
 	//for (int y = 0; y < 6; ++y) {
