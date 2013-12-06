@@ -9,7 +9,8 @@
 
 #define M_PI 3.141592
 
-#include <btBulletDynamicsCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
+#include <GLDebugDrawer.h>
 
 GLint windowWidth = 800, windowHeight = 600; // window dimensions
 btCollisionShape* groundShape;
@@ -19,6 +20,8 @@ std::vector<btRigidBody*> objects;
 
 // display callback: renders the scene
 void display() {
+    dynamicsWorld->debugDrawWorld();
+    /*
 	glViewport(0, 0, windowWidth, windowHeight);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -45,20 +48,21 @@ void display() {
 		glBegin(GL_POLYGON);
 		for (int i= 0; i<3; i++) 
 		{
-			//glVertex2d(trans.getOrigin().getX() + xadd[(i)%4], trans.getOrigin().getY() + yadd[(i)%4]);	
-			trans.getOrigin().getX()
+			glVertex2d(trans.getOrigin().getX(), trans.getOrigin().getY());	
+			//trans.getOrigin().getX();
 		}
 		glEnd();
 		glBegin(GL_POLYGON);
 		for (int i= 0; i<3; i++) 
 		{
-			//glVertex2d(trans.getOrigin().getX() + xadd[(i+1)%4], trans.getOrigin().getY() + yadd[(i+1)%4]);	
+			glVertex2d(trans.getOrigin().getX(), trans.getOrigin().getY());	
 		}
 		glEnd();
 		glPopMatrix();
 	}
 
 	glutSwapBuffers();
+    */
 }
 
 // reshape callback: sets window width and height
@@ -118,6 +122,10 @@ int main(int argc, char **argv) {
     // The world.
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0,-10,0));
+
+    GLDebugDrawer dd;
+
+    dynamicsWorld->setDebugDrawer(&dd);
 
 	//// create bodies
 	//for (int y = 0; y < 6; ++y) {

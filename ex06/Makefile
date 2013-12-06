@@ -1,10 +1,10 @@
 APP:=ex06
 SHELL:=sh
-CXX:=g++ -Wall -O2 -fno-strict-aliasing
-LD:=g++ -lglut -lGLU -lGL -lBox2D
+CXX:=g++ -Wall -O2 -fno-strict-aliasing -I /usr/include/bullet -I OpenGL
+LD:=g++ -lglut -lGLU -lGL $(shell pkg-config --libs bullet)
 MAKEDEP:=g++ -M
 
-SOURCES:=$(wildcard *.cpp)
+SOURCES:=$(shell find . -name '*.cpp')
 OBJECTS:=$(SOURCES:.cpp=.o)
 DEPS:=$(SOURCES:.cpp=.d)
 
