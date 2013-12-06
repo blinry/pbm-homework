@@ -101,7 +101,7 @@ void make_body(float x, float y, float z, float a, float b, float c, float yaw, 
 	box = new btBoxShape(btVector3(a/2, b/2, c/2));
 
 	btDefaultMotionState* boxMotionState = new btDefaultMotionState(btTransform(btQuaternion(yaw, pitch, roll),btVector3(x, y, z)));
-	btScalar mass = 0.1;
+	btScalar mass = a*b*c;
 	if(fixed)
 		mass = 0.0;
 
@@ -166,13 +166,18 @@ int main(int argc, char **argv) {
 
 	//ground plane
 	//make_body(-30, 30, -2, -2.1, true);
-    make_body(0, -1, 0, 60, 1, 60, 0, 0, 0, true);
+    make_body(0, -1, 0, 800, 1, 800, 0, 0, 0, true);
 
-	for (int x = -29; x <= 29; x += 2)
+	//for (int x = -29; x <= 29; x += 2)
+    //for(double i=0; i<2*M_PI-M_PI/32; i+=M_PI/32)
+    for(double i=0; i<150; i++)
 	{
-        make_body(x, 3, 0, 0.5, 4, 1.5, 0, 0, 0);
+        double r = 3+pow(i,1.2)/2.0;
+        double t = 5;
+        double f = r/10;
+        make_body(r*cos(i/t), f*2, r*sin(i/t), f*0.5, f*4, f*1.5, -i/t+M_PI/2, 0, 0);
 	}
-    objects[1]->applyForce(btVector3(0,-20,0),btVector3(3,0,0));
+    objects[1]->applyForce(btVector3(20,0,40),btVector3(0,0,0));
 
 	// enable smoothing
 	glEnable(GL_BLEND);
