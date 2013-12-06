@@ -7,9 +7,10 @@
 #include <GL/glut.h>
 #endif
 
-#define M_PI 3.141592
+#define _USE_MATH_DEFINES
+#include <cmath>
 
-#include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 #include <GLDebugDrawer.h>
 
 GLint windowWidth = 800, windowHeight = 600; // window dimensions
@@ -17,21 +18,66 @@ btCollisionShape* groundShape;
 btDiscreteDynamicsWorld* dynamicsWorld;
 std::vector<btRigidBody*> objects;
 
+int old_button = -1, old_state = -1, old_x = -1, old_y = -1;
+float modelview_matrix[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+
 
 // display callback: renders the scene
 void display() {
 	glViewport(0, 0, windowWidth, windowHeight);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-0.1 * windowWidth, 0.1 * windowWidth, -0.1 * windowHeight, 0.1 * windowHeight, -1, 1);
+	float aspect = windowWidth / float(windowHeight);
+	if (aspect >= 1.0) {
+		glOrtho(-aspect, aspect, -1.0, 1.0, -10.0, 10.0);
+	} else {
+		glOrtho(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect, -10.0, 10.0);
+	}
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glMultMatrixf(modelview_matrix);
+
 	glClear(GL_COLOR_BUFFER_BIT);
 
     dynamicsWorld->debugDrawWorld();
 
     glFlush();
 	glutSwapBuffers();
+}
+
+void mouse(int button, int state, int x, int y) {
+	old_button = button;
+	old_state = state;
+	old_x = x;
+	old_y = y;
+	glutPostRedisplay();
+}
+
+void motion(int x, int y) {
+	float dx = x - old_x;
+	float dy = y - old_y;
+
+	switch (old_button) {
+		case GLUT_LEFT_BUTTON:
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glRotatef(sqrt(dx * dx + dy * dy), dy, dx, 0.0);
+			glMultMatrixf(modelview_matrix);
+			glGetFloatv(GL_MODELVIEW_MATRIX, modelview_matrix);
+			glutPostRedisplay();
+			break;
+		case GLUT_RIGHT_BUTTON:
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glScalef(exp(-0.01 * dy), exp(-0.01 * dy), exp(-0.01 * dy));
+			glMultMatrixf(modelview_matrix);
+			glGetFloatv(GL_MODELVIEW_MATRIX, modelview_matrix);
+			glutPostRedisplay();
+			break;
+	}
+	
+	old_x = x;
+	old_y = y;
 }
 
 // reshape callback: sets window width and height
@@ -147,6 +193,8 @@ int main(int argc, char **argv) {
 	glutIdleFunc(idle);
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
+	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
 
