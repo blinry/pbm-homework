@@ -53,7 +53,7 @@ void idle() {
 void make_body(double x0, double x1, double y0, double y1, const bool fixed = false) 
 {
 	btCollisionShape* domino;
-	domino = new btBoxShape(btVector3(btScalar(abs(x1-x0)/2.0),btScalar(abs(y1-y0)/2.0),btScalar(0.1)));
+	domino = new btBoxShape(btVector3(btScalar(abs(x1-x0)/2.0),btScalar(abs(y1-y0)/2.0),btScalar(1)));
 
 	btDefaultMotionState* dominoMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3((x0+x1)/2.0,(y1+y0)/2.0,0)));
 	btScalar mass = 0.1;
@@ -124,8 +124,9 @@ int main(int argc, char **argv) {
 
 	for (int x = -29; x <= 29; x += 2)
 	{
-		make_body(x - 0.25, x + 0.25, 1, 5);
+		make_body(x - 0.5, x + 0.5, 1, 5);
 	}
+    objects[1]->applyForce(btVector3(0,-20,0),btVector3(3,0,0));
 
 	// enable smoothing
 	glEnable(GL_BLEND);
