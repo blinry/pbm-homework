@@ -95,15 +95,22 @@ void idle() {
 	dynamicsWorld->stepSimulation(1/60.f,10);
 	//world->ClearForces();
 
+    if(player->getCenterOfMassPosition().y() < -10) {
+        printf("You lose!\n");
+        exit(1);
+    }
+
     bool clean = true;
-    for(int i=0; i<objects.size(); i++) {
+    for(int i=2; i<objects.size(); i++) {
         btRigidBody *o = objects[i];
-        if (o == player) {
-            continue;
-        }
         if(o->getCenterOfMassPosition().y() > -10) {
             clean = false;
         }
+    }
+
+    if (clean) {
+        printf("Well done! You're welcome to clean our homes now!\n");
+        exit(0);
     }
 
 	glutPostRedisplay();
@@ -133,19 +140,19 @@ void keyboard(unsigned char key, int x, int y) {
 			break;
         case 97:
             player->activate();
-            player->applyCentralForce(btVector3(-10000,0,0));
+            player->applyCentralForce(btVector3(-100000,0,0));
             break;
         case 100:
             player->activate();
-            player->applyCentralForce(btVector3(10000,0,0));
+            player->applyCentralForce(btVector3(100000,0,0));
             break;
         case 115:
             player->activate();
-            player->applyCentralForce(btVector3(0,0,10000));
+            player->applyCentralForce(btVector3(0,0,100000));
             break;
         case 119:
             player->activate();
-            player->applyCentralForce(btVector3(0,0,-10000));
+            player->applyCentralForce(btVector3(0,0,-100000));
             break;
         case 32: 
             first->activate();
@@ -205,7 +212,7 @@ int main(int argc, char **argv) {
 
 	//for (int x = -29; x <= 29; x += 2)
     //for(double i=0; i<2*M_PI-M_PI/32; i+=M_PI/32)
-    for(double i=0; i<150; i++)
+    for(double i=10; i<150; i++)
 	{
         double r = 3+pow(i,1.2)/2.0;
         double t = 5;
