@@ -18,6 +18,7 @@ btCollisionShape* groundShape;
 btDiscreteDynamicsWorld* dynamicsWorld;
 std::vector<btRigidBody*> objects;
 btRigidBody* player;
+btRigidBody* first;
 
 int old_button = -1, old_state = -1, old_x = -1, old_y = -1;
 float modelview_matrix[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
@@ -94,6 +95,17 @@ void idle() {
 	dynamicsWorld->stepSimulation(1/60.f,10);
 	//world->ClearForces();
 
+    bool clean = true;
+    for(int i=0; i<objects.size(); i++) {
+        btRigidBody *o = objects[i];
+        if (o == player) {
+            continue;
+        }
+        if(o->getCenterOfMassPosition().y() > -10) {
+            clean = false;
+        }
+    }
+
 	glutPostRedisplay();
 }
 
@@ -121,20 +133,23 @@ void keyboard(unsigned char key, int x, int y) {
 			break;
         case 97:
             player->activate();
-            player->applyCentralForce(btVector3(-10000000000,0,0));
+            player->applyCentralForce(btVector3(-10000,0,0));
             break;
         case 100:
             player->activate();
-            player->applyCentralForce(btVector3(10000000000,0,0));
+            player->applyCentralForce(btVector3(10000,0,0));
             break;
         case 115:
             player->activate();
-            player->applyCentralForce(btVector3(0,0,10000000000));
+            player->applyCentralForce(btVector3(0,0,10000));
             break;
         case 119:
             player->activate();
-            player->applyCentralForce(btVector3(0,0,-10000000000));
+            player->applyCentralForce(btVector3(0,0,-10000));
             break;
+        case 32: 
+            first->activate();
+            first->applyForce(btVector3(2/1000.0,0,4/1000.0),btVector3(0,0,0));
 	}
 }
 
@@ -157,7 +172,7 @@ int main(int argc, char **argv) {
     GLDebugDrawer dd;
 
     dynamicsWorld->setDebugDrawer(&dd);
-    dynamicsWorld->getDebugDrawer()->setDebugMode(true);
+    dynamicsWorld->getDebugDrawer()->setDebugMode(1);
 
 	//// create bodies
 	//for (int y = 0; y < 6; ++y) {
@@ -183,9 +198,9 @@ int main(int argc, char **argv) {
 
 	//ground plane
 	//make_body(-30, 30, -2, -2.1, true);
-    make_body(0, -1, 0, 800, 1, 800, 0, 0, 0, true);
+    make_body(0, -0.1, 0, 80, 0.1, 80, 0, 0, 0, true);
 
-    make_body(300, 2, 300, 100, 100, 100, 0, 0, 0);
+    make_body(30, 0.2, 30, 10, 10, 10, 0, 0, 0);
     player = objects[1];
 
 	//for (int x = -29; x <= 29; x += 2)
@@ -195,9 +210,10 @@ int main(int argc, char **argv) {
         double r = 3+pow(i,1.2)/2.0;
         double t = 5;
         double f = r/10;
-        make_body(r*cos(i/t), f*2, r*sin(i/t), f*0.5, f*4, f*1.5, -i/t+M_PI/2, 0, 0);
+        make_body(r*cos(i/t)/10.0, f*2/10.0, r*sin(i/t)/10.0, f*0.5/10.0, f*4/10.0, f*1.5/10.0, -i/t+M_PI/2, 0, 0);
 	}
-    objects[1]->applyForce(btVector3(20,0,40),btVector3(0,0,0));
+
+    first = objects[2];
 
 	// enable smoothing
 	glEnable(GL_BLEND);
