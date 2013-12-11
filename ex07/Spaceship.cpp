@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <GL/glfw.h>
 #include "Asteroid.h"
+#include <limits>
+#include <stdio.h>
 
 Spaceship::Spaceship(): Object(0, 0, 0, 0, 0, 0), _speed(0.0),_x(0.0), _y(0.0), _z(0.0), _fx(0.0), _fy(0.0), _fz(1.0), _ux(0.0), _uy(1.0), _uz(0.0), _rx(1.0), _ry(0.0), _rz(0.0) {
 	/***** You can also define a more complex spaceship here if you like! *****/
@@ -149,5 +151,50 @@ void Spaceship::update_bb() {
 	 *
 	 * bounding_box()->minval(0)->coordinate() = new_minimal_x;
 	 */
+    float x, y, z, tx, ty, tz;
+    float minx = std::numeric_limits<float>::max();
+    float maxx = -std::numeric_limits<float>::max();
+    float miny = std::numeric_limits<float>::max();
+    float maxy = -std::numeric_limits<float>::max();
+    float minz = std::numeric_limits<float>::max();
+    float maxz = -std::numeric_limits<float>::max();
+
+    for(int i=0; i<_triangles.size(); i++) {
+        for(int j=0; j<3; j++) {
+            switch (j) {
+                case 0:
+                    x = _triangles[i].x0;
+                    y = _triangles[i].y0;
+                    z = _triangles[i].z0;
+                    break;
+                case 1:
+                    x = _triangles[i].x1;
+                    y = _triangles[i].y1;
+                    z = _triangles[i].z1;
+                    break;
+                case 2:
+                    x = _triangles[i].x2;
+                    y = _triangles[i].y2;
+                    z = _triangles[i].z2;
+                    break;
+            }
+            tx = _rx*x + _ux*y + _fx*z + _x;
+            ty = _ry*x + _uy*y + _fy*z + _y;
+            tz = _rz*x + _uz*y + _fz*z + _z;
+
+            minx = fminf(minx, tx);
+            miny = fminf(miny, ty);
+            minz = fminf(minz, tz);
+            maxx = fmaxf(maxx, tx);
+            maxy = fmaxf(maxy, ty);
+            maxz = fmaxf(maxz, tz);
+        }
+    }
+    bounding_box()->minval(0)->coordinate() = minx;
+    bounding_box()->maxval(0)->coordinate() = maxx;
+    bounding_box()->minval(1)->coordinate() = miny;
+    bounding_box()->maxval(1)->coordinate() = maxy;
+    bounding_box()->minval(2)->coordinate() = minz;
+    bounding_box()->maxval(2)->coordinate() = maxz;
 }
 
