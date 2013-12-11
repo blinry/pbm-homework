@@ -102,7 +102,6 @@ bool Spaceship::collides(const Asteroid *other) const {
             float tz = _rz*x + _uz*y + _fz*z + _z;
 
             if (pow(pow(other->x() - tx, 2) + pow(other->y() - ty, 2) + pow(other->z() - tz, 2), 1.0/2) < other->size()) {
-                printf("?\n");
                 return true;
             }
         }

@@ -41,7 +41,6 @@ void display() {
 	}
     std::vector<std::pair<const AABB*, const AABB*> > collisions = cd->detect_possible_collisions();
 	for (size_t i = 0; i < objects.size(); ++i) {
-        //printf("%d\n", collisions.size());
         glColor3f(0.0, 1.0, 0.0);
         for (size_t j = 0; j < collisions.size(); ++j) {
             if (objects[i]->bounding_box() == collisions[j].first || 
