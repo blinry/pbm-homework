@@ -75,6 +75,38 @@ bool Spaceship::collides(const Asteroid *other) const {
 	 * ( _ry  _uy  _fy ) . ( y ) + ( _y )
 	 * ( _rz  _uz  _fz )   ( z ) + ( _z ).
 	 */
+
+    float x, y, z;
+    for(int i=0; i<_triangles.size(); i++) {
+        for(int j=0; j<3; j++) {
+            switch (j) {
+                case 0:
+                    x = _triangles[i].x0;
+                    y = _triangles[i].y0;
+                    z = _triangles[i].z0;
+                    break;
+                case 1:
+                    x = _triangles[i].x1;
+                    y = _triangles[i].y1;
+                    z = _triangles[i].z1;
+                    break;
+                case 2:
+                    x = _triangles[i].x2;
+                    y = _triangles[i].y2;
+                    z = _triangles[i].z2;
+                    break;
+            }
+
+            float tx = _rx*x + _ux*y + _fx*z + _x;
+            float ty = _ry*x + _uy*y + _fy*z + _y;
+            float tz = _rz*x + _uz*y + _fz*z + _z;
+
+            if (pow(pow(other->x() - tx, 2) + pow(other->y() - ty, 2) + pow(other->z() - tz, 2), 1.0/2) < other->size()) {
+                printf("?\n");
+                return true;
+            }
+        }
+    }
 	return false;
 }
 
