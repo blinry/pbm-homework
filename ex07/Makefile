@@ -2,7 +2,7 @@ APP:=ex07
 SHELL:=sh
 CXX:=g++ -Wall -O2
 LD:=g++
-LIBS:=-lglfw -lGLU -lGL
+LIBS:=-lglfw2 -lGLU -lGL
 MAKEDEP:=g++ -M
 
 CPPSOURCES:=$(wildcard *.cpp)
