@@ -17,6 +17,7 @@ GLint windowWidth = 800, windowHeight = 600; // window dimensions
 btCollisionShape* groundShape;
 btDiscreteDynamicsWorld* dynamicsWorld;
 std::vector<btRigidBody*> objects;
+btRigidBody* player;
 
 int old_button = -1, old_state = -1, old_x = -1, old_y = -1;
 float modelview_matrix[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
@@ -118,6 +119,22 @@ void keyboard(unsigned char key, int x, int y) {
 		case 27:
 			exit(0);
 			break;
+        case 97:
+            player->activate();
+            player->applyCentralForce(btVector3(-10000000000,0,0));
+            break;
+        case 100:
+            player->activate();
+            player->applyCentralForce(btVector3(10000000000,0,0));
+            break;
+        case 115:
+            player->activate();
+            player->applyCentralForce(btVector3(0,0,10000000000));
+            break;
+        case 119:
+            player->activate();
+            player->applyCentralForce(btVector3(0,0,-10000000000));
+            break;
 	}
 }
 
@@ -167,6 +184,9 @@ int main(int argc, char **argv) {
 	//ground plane
 	//make_body(-30, 30, -2, -2.1, true);
     make_body(0, -1, 0, 800, 1, 800, 0, 0, 0, true);
+
+    make_body(300, 2, 300, 100, 100, 100, 0, 0, 0);
+    player = objects[1];
 
 	//for (int x = -29; x <= 29; x += 2)
     //for(double i=0; i<2*M_PI-M_PI/32; i+=M_PI/32)
