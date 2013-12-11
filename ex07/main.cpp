@@ -3,6 +3,7 @@
 #include "CollisionDetector.h"
 #include "Spaceship.h"
 #include "Asteroid.h"
+#include <stdio.h>
 
 GLint windowWidth = 512, windowHeight = 512;
 float angle_step = 0.5, speed_step = 1.0;
@@ -38,8 +39,19 @@ void display() {
 	} else {
 		glColor3f(0.0, 1.0, 0.0);
 	}
-	for (size_t i = 0; i < objects.size(); ++i)
+    std::vector<std::pair<const AABB*, const AABB*> > collisions = cd->detect_possible_collisions();
+	for (size_t i = 0; i < objects.size(); ++i) {
+        //printf("%d\n", collisions.size());
+        glColor3f(0.0, 1.0, 0.0);
+        for (size_t j = 0; j < collisions.size(); ++j) {
+            if (objects[i]->bounding_box() == collisions[j].first || 
+                objects[i]->bounding_box() == collisions[j].second) {
+                glColor3f(1.0, 0.0, 0.0);
+                break;
+            }
+        }
 		objects[i]->bounding_box()->draw();
+    }
 
 	for (size_t i = 0; i < objects.size(); ++i)
 		objects[i]->draw();
