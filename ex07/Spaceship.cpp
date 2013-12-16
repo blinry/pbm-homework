@@ -237,7 +237,7 @@ bool Spaceship::collides(const Asteroid *other) const {
 	z = _triangles[0].z0;
 
 	v.x = _rx*x + _ux*y + _fx*z + _x;
-	v.x = _ry*x + _uy*y + _fy*z + _y;
+	v.y = _ry*x + _uy*y + _fy*z + _y;
 	v.z = _rz*x + _uz*y + _fz*z + _z;
 
 	triangle[0] = v;
@@ -248,7 +248,7 @@ bool Spaceship::collides(const Asteroid *other) const {
 	z = _triangles[1].z1;
 
 	v.x = _rx*x + _ux*y + _fx*z + _x;
-	v.x = _ry*x + _uy*y + _fy*z + _y;
+	v.y = _ry*x + _uy*y + _fy*z + _y;
 	v.z = _rz*x + _uz*y + _fz*z + _z;
 
 	triangle[1] = v;
@@ -259,7 +259,7 @@ bool Spaceship::collides(const Asteroid *other) const {
 	z = _triangles[2].z2;
 
 	v.x = _rx*x + _ux*y + _fx*z + _x;
-	v.x = _ry*x + _uy*y + _fy*z + _y;
+	v.y = _ry*x + _uy*y + _fy*z + _y;
 	v.z = _rz*x + _uz*y + _fz*z + _z;
 
 	triangle[2] = v;
