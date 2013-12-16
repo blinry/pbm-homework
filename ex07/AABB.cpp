@@ -1,5 +1,4 @@
 #include "AABB.h"
-
 #include <GL/glfw.h>
 
 std::ostream &operator<<(std::ostream &o, const AABB &b) {
