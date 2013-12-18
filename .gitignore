@@ -36,3 +36,5 @@ install_manifest.txt
 *.aux
 *.log
 *.synctex*
+*.fdb_latexmk
+*.fls
