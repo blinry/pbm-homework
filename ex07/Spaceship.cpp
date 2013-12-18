@@ -231,54 +231,56 @@ bool Spaceship::collides(const Asteroid *other) const {
 	float x,y,z;
 	vector3 v;
 
-	//first vertex
-	x = _triangles[0].x0;
-	y = _triangles[0].y0;
-	z = _triangles[0].z0;
+    for(int i=0; i<_triangles.size(); i++) {
+        //first vertex
+        x = _triangles[i].x0;
+        y = _triangles[i].y0;
+        z = _triangles[i].z0;
 
-	v.x = _rx*x + _ux*y + _fx*z + _x;
-	v.y = _ry*x + _uy*y + _fy*z + _y;
-	v.z = _rz*x + _uz*y + _fz*z + _z;
+        v.x = _rx*x + _ux*y + _fx*z + _x;
+        v.y = _ry*x + _uy*y + _fy*z + _y;
+        v.z = _rz*x + _uz*y + _fz*z + _z;
 
-	triangle[0] = v;
+        triangle[0] = v;
 
-	//second vertex
-	x = _triangles[1].x1;
-	y = _triangles[1].y1;
-	z = _triangles[1].z1;
+        //second vertex
+        x = _triangles[i].x1;
+        y = _triangles[i].y1;
+        z = _triangles[i].z1;
 
-	v.x = _rx*x + _ux*y + _fx*z + _x;
-	v.y = _ry*x + _uy*y + _fy*z + _y;
-	v.z = _rz*x + _uz*y + _fz*z + _z;
+        v.x = _rx*x + _ux*y + _fx*z + _x;
+        v.y = _ry*x + _uy*y + _fy*z + _y;
+        v.z = _rz*x + _uz*y + _fz*z + _z;
 
-	triangle[1] = v;
+        triangle[1] = v;
 
-	//third vertex
-	x = _triangles[2].x2;
-	y = _triangles[2].y2;
-	z = _triangles[2].z2;
+        //third vertex
+        x = _triangles[i].x2;
+        y = _triangles[i].y2;
+        z = _triangles[i].z2;
 
-	v.x = _rx*x + _ux*y + _fx*z + _x;
-	v.y = _ry*x + _uy*y + _fy*z + _y;
-	v.z = _rz*x + _uz*y + _fz*z + _z;
+        v.x = _rx*x + _ux*y + _fx*z + _x;
+        v.y = _ry*x + _uy*y + _fy*z + _y;
+        v.z = _rz*x + _uz*y + _fz*z + _z;
 
-	triangle[2] = v;
+        triangle[2] = v;
 
-	//get closest point on triangle:
-	vector3 source;
-	source.x = other->x();
-	source.y = other->y();
-	source.z = other->z();
+        //get closest point on triangle:
+        vector3 source;
+        source.x = other->x();
+        source.y = other->y();
+        source.z = other->z();
 
-	vector3 cl = closesPointOnTriangle(triangle, source);
+        vector3 cl = closesPointOnTriangle(triangle, source);
 
-	vector3 diff = cl - source;
+        vector3 diff = cl - source;
 
-	//collision test, avoid square root by squaring both sides:
-	if (diff.dot(diff) <= other->size() * other->size()) 
-	{
-		return true;
-	}
+        //collision test, avoid square root by squaring both sides:
+        if (diff.dot(diff) <= other->size() * other->size()) 
+        {
+            return true;
+        }
+    }
 
 	return false;
 }
