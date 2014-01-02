@@ -6,13 +6,296 @@
 \usepackage{amssymb}
 \usepackage{microtype}
 
-\title{PMS -- Aufgabenblatt 8}
+\title{PMS -- Exercise Sheet 8}
 \date{}
 
 \begin{document}
 
 \maketitle
 
-% TODO: Insert solution here!
+\section*{Exercise 1}
+
+\subsection*{Initialisierung}
+
+\(A=\left(
+\begin{array}{ccc}
+ 1 & 1 & 4 \\
+ 1 & 1 & 1 \\
+ 4 & 1 & 1 \\
+\end{array}
+\right)\)
+
+\(b=\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)\)
+
+\(x_0=\left(
+\begin{array}{c}
+ 0 \\
+ 0 \\
+ 0 \\
+\end{array}
+\right)\)
+
+\subsection*{Erste Iteration}
+
+\(d_0=b - A * x_0 = \left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)-\left(
+\begin{array}{ccc}
+ 1 & 1 & 4 \\
+ 1 & 1 & 1 \\
+ 4 & 1 & 1 \\
+\end{array}
+\right)*\left(
+\begin{array}{c}
+ 0 \\
+ 0 \\
+ 0 \\
+\end{array}
+\right)=\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)\)
+
+\(r_0=d_0=\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)\)
+
+\(\alpha _0=\frac{r_0{}^T* r_0}{d_0{}^T*A *d_0}=\frac{\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)^T* \left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)}{\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)^T* \left(
+\begin{array}{ccc}
+ 1 & 1 & 4 \\
+ 1 & 1 & 1 \\
+ 4 & 1 & 1 \\
+\end{array}
+\right)*\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right) }=\frac{1}{5}\)
+
+\(x_1= x_0+\alpha _0d_0= \left(
+\begin{array}{c}
+ 0 \\
+ 0 \\
+ 0 \\
+\end{array}
+\right) + \frac{1}{5}\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right) = \left(
+\begin{array}{c}
+ \frac{6}{5} \\
+ \frac{6}{5} \\
+ \frac{6}{5} \\
+\end{array}
+\right)\)
+
+\subsection*{Zweite Iteration}
+
+\(r_1=r_0- \alpha _0 A * d_0=\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)-\frac{1}{5} \left(
+\begin{array}{ccc}
+ 1 & 1 & 4 \\
+ 1 & 1 & 1 \\
+ 4 & 1 & 1 \\
+\end{array}
+\right) *\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right) = \left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right)\)
+
+\(\beta _1= \frac{r_1{}^Tr_1}{r_0{}^Tr_0}=\frac{\left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right)^T* \left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right)}{\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)^T* \left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)}=\frac{2}{25}\)
+
+\(d_1= r_1+\beta _1d_0=  \left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right) + \frac{2}{25}\left(
+\begin{array}{c}
+ 6 \\
+ 6 \\
+ 6 \\
+\end{array}
+\right)=\left(
+\begin{array}{c}
+ -\frac{18}{25} \\
+ \frac{72}{25} \\
+ -\frac{18}{25} \\
+\end{array}
+\right)\)
+
+\(\alpha _1=\frac{r_1{}^T* r_1}{d_1{}^T* A * d_1}=\frac{\left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right)^T* \left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right)}{\left(
+\begin{array}{c}
+ -\frac{18}{25} \\
+ \frac{72}{25} \\
+ -\frac{18}{25} \\
+\end{array}
+\right)^T* \left(
+\begin{array}{ccc}
+ 1 & 1 & 4 \\
+ 1 & 1 & 1 \\
+ 4 & 1 & 1 \\
+\end{array}
+\right) *\left(
+\begin{array}{c}
+ -\frac{18}{25} \\
+ \frac{72}{25} \\
+ -\frac{18}{25} \\
+\end{array}
+\right)}= \frac{5}{3}\)
+
+\(x_2=x_1+\alpha _1d_1= \left(
+\begin{array}{c}
+ \frac{6}{5} \\
+ \frac{6}{5} \\
+ \frac{6}{5} \\
+\end{array}
+\right) + \frac{5}{3}\left(
+\begin{array}{c}
+ -\frac{18}{25} \\
+ \frac{72}{25} \\
+ -\frac{18}{25} \\
+\end{array}
+\right)=\left(
+\begin{array}{c}
+ 0 \\
+ 6 \\
+ 0 \\
+\end{array}
+\right)\text{}\)
+
+\(r_2=r_1-\alpha _1 A * d_1= \left(
+\begin{array}{c}
+ -\frac{6}{5} \\
+ \frac{12}{5} \\
+ -\frac{6}{5} \\
+\end{array}
+\right) - \frac{5}{3}\left(
+\begin{array}{ccc}
+ 1 & 1 & 4 \\
+ 1 & 1 & 1 \\
+ 4 & 1 & 1 \\
+\end{array}
+\right) * \left(
+\begin{array}{c}
+ -\frac{18}{25} \\
+ \frac{72}{25} \\
+ -\frac{18}{25} \\
+\end{array}
+\right)=\left(
+\begin{array}{c}
+ 0 \\
+ 0 \\
+ 0 \\
+\end{array}
+\right)\)
+
+Abbruch, da Residuum \(r_2=0 \Rightarrow\) keine weitere {\" A}nderung an gefundenem Optimum \(x_2=\left(
+\begin{array}{c}
+ 0 \\
+ 6 \\
+ 0 \\
+\end{array}
+\right)\)
+
+\section*{Exercise 2}
+
+\begin{itemize}
+    \item[a)] As each step of the algorithm finds the local minimum of one dimension, for a 3-dimensional systems it will at most take three iterations.
+    \item[b)] In large systems, the conjugate gradient algorithm allows for fast approximation, doing only a few iterations until the solution is “good enough”. Gauss elimination does not allow this. TODO: More?
+    \item[c)] $A$ has to be a symmetric, positive-definite matrix. All symmetric matrices are also square.
+    \item[d)] TODO
+\end{itemize}
 
 \end{document}
