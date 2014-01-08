@@ -15,7 +15,7 @@
 
 \section*{Exercise 1}
 
-\subsection*{Initialisierung}
+\subsection*{Initialization}
 
 \(A=\left(
 \begin{array}{ccc}
@@ -41,7 +41,7 @@
 \end{array}
 \right)\)
 
-\subsection*{Erste Iteration}
+\subsection*{First iteration}
 
 \(d_0=b - A * x_0 = \left(
 \begin{array}{c}
@@ -129,7 +129,7 @@
 \end{array}
 \right)\)
 
-\subsection*{Zweite Iteration}
+\subsection*{Second iteration}
 
 \(r_1=r_0- \alpha _0 A * d_0=\left(
 \begin{array}{c}
@@ -281,26 +281,29 @@
 \end{array}
 \right)\)
 
-Abbruch, da Residuum \(r_2=0 \Rightarrow\) keine weitere {\" A}nderung an gefundenem Optimum \(x_2=\left(
+Stop, residuum \(r_2=0 \Rightarrow\) the calculated optimum \(x_2=\left(
 \begin{array}{c}
  0 \\
  6 \\
  0 \\
 \end{array}
 \right)\)
+will not change anymore.
 
 \section*{Exercise 2}
 
 \begin{itemize}
     \item[a)] As each step of the algorithm finds the local minimum of one dimension, for a 3-dimensional systems it will at most take three iterations.
-    \item[b)] In large systems, the conjugate gradient algorithm allows for fast approximation, doing only a few iterations until the solution is “good enough”. Gauss elimination does not allow this. TODO: More?
+    \item[b)] In large systems, the conjugate gradient algorithm allows for fast approximation, doing only a few iterations until the solution is “good enough”. Gauss elimination does not allow this.
+
+        Additionally, it is sufficient to know the product $Ax$ (in physical calculations, this equals calculating forces). This is an advantage over other approaches, where $A$ has to be known explicitly, especially when $A$ is very sparse.
     \item[c)] $A$ has to be a symmetric, positive-definite matrix. All symmetric matrices are also square.
     \item[d)] 
     \begin{itemize}
-    \item $A$ negative-definite $\Rightarrow$ global Maximum can be found with CG. Replace $d_i$ with $-d_i$ for ascending directions (TODO: Is that correct?)
-    \item $A$ singular positive indefinite (TODO: What is that? Does positive indefinite even exist?) $\Rightarrow$ No unique Minimum. CG calculates just one possible Minimum
-    \item $A$ indefinite $\Rightarrow$ Saddlepoint-Problem. CG won't work (or one step-size should be $\infty$, because one can find a point at which one can walk indefinitely and still get smaller objective function values).
-    \item $A$ not square $\Rightarrow$ if $A \in \mathbb{R}^{m\times n}$ with $m > n$ ($A$ has more rows than colums) this is a \glqq Lineares Ausgleichsproblem\grqq . This can be solved by decomposing $A$ in a specific way and solving another system of linear equations (which can again be done using CG).
+    \item $A$ negative-definite $\Rightarrow$ global maximum can be found with CG. In our opinion, the algorithm will work nevertheless, as $d_i^TAd_i$ will be negative, which leads to ascending steps.
+    \item According to the lecture: $A$ singular positive indefinite $\Rightarrow$ No unique minimum. CG calculates just one possible Minimum. (Note: We are not sure whether positive {\em in}definite matrices even exist\dots)
+    \item $A$ indefinite $\Rightarrow$ saddlepoint problem. CG won't work (or one step-size should be $\infty$, because one can find a point at which one can walk indefinitely and still get smaller objective function values).
+    \item $A$ not square $\Rightarrow$ if $A \in \mathbb{R}^{m\times n}$ with $m > n$ ($A$ has more rows than colums) this is a {\em linear curve fitting problem}. This can be solved by decomposing $A$ in a specific way and solving another system of linear equations (which can again be done using CG).
     \end{itemize}
 \end{itemize}
 
