@@ -37,7 +37,11 @@ $$\vec{L} = I\vec{\omega} = \left(\begin{array}{rrr}
 0\\
 1\\
 0
-\end{array}\right) = \left(0,\,3.52,\,0\right)
+\end{array}\right) = \left(\begin{array}{r}
+0\\
+3.52\\
+0
+\end{array}\right)
 $$
 
 \section*{Exercise 3}
@@ -50,10 +54,18 @@ $$I' = \left(\begin{array}{rrr}
 
 \section*{Exercise 4}
 
-$$\vec{\omega}' = I'^{-1}\vec{L} \approx \left(0.12,\,6.35,\,0\right)$$
+$$\vec{\omega}' = I'^{-1}\vec{L} \approx \left(\begin{array}{r}
+0.12\\
+6.35\\
+0
+\end{array}\right)$$
+
+$$|\vec{\omega}'| \approx 6.35\ \text{s}^{-1}$$
 
 \section*{Exercise 5}
 
-TODO
+(TODO: \textit{How could this happen?}) Over the next few rotations, due to the tilted axis of rotation, gravity would pull the dancer towards earth and tilt the axis even further.
+
+Error source: The inertia tensor describes rotation around an objects center of gravity, while in our case the dancer's rotational axis will always run through the contact point between feet and floor. Additionally, due to friction with air and floor, the dancer would probably not spin that fast.
 
 \end{document}
